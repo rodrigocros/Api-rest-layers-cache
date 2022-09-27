@@ -1,8 +1,9 @@
 using System.Runtime.Serialization;
 using DEVinCar.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
-namespace DEVinCar.Api.Data;
+namespace DEVinCar.Infra.DataBase;
 
 public class DevInCarDbContext : DbContext
 {
@@ -29,9 +30,7 @@ public class DevInCarDbContext : DbContext
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.UseSqlServer(
-            _configuration.GetConnectionString("DEV_IN_CAR")
-        );
+        optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=BD_DEVINCAR2;Trusted_Connection=True;");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
