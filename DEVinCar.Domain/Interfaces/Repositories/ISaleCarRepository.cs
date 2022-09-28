@@ -6,7 +6,8 @@ using DEVinCar.Domain.Models;
 
 namespace DEVinCar.Domain.Interfaces.Repositories
 {
-    public interface ICarRepository : IBaseRepository<Car, int>
-    { 
+    public interface ISaleCarRepository : IBaseRepository<SaleCar, int>
+    {
+        
     }
 }
