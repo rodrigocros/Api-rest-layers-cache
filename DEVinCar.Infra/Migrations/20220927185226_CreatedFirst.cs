@@ -91,13 +91,17 @@ namespace DEVinCar.Infra.Migrations
                         column: x => x.BuyerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        // onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+
                     table.ForeignKey(
                         name: "FK_Sales_Users_SellerId",
                         column: x => x.SellerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        // onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+
                 });
 
             migrationBuilder.CreateTable(
