@@ -1,12 +1,43 @@
 using System.Text.Json.Serialization;
-using DEVinCar.Infra.DataBase;
+using DEVinCar.Domain.Interfaces.Repositories;
+using DEVinCar.Domain.Interfaces.Services;
+using DEVinCar.Domain.Service;
+using DEVinCar.Di;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// builder.Services.AddDbContext<DevInCarDbContext>();
+
+// builder.Services.AddScoped<IAddressResitory, AddressRepository>();
+// builder.Services.AddScoped<ICarRepository, CarRepository>();
+// builder.Services.AddScoped<ICityRepository, CityRepository>();
+// builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+// builder.Services.AddScoped<ISaleCarRepository, SaleCarRepository>();
+// builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+// builder.Services.AddScoped<IStateRepository, StateRepository>();
+// builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.Register();
+
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<ICarService, CarService>();
+builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+builder.Services.AddScoped<ISaleCarService, SaleCarService>();
+builder.Services.AddScoped<ISaleService, SaleService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IStateService, StateService>();
+
+
+
+
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<DevInCarDbContext>();
+
+
 
 var app = builder.Build();
 

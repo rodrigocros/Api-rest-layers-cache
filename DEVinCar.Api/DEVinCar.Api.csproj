@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DEVinCar.Domain\DEVinCar.Domain.csproj" />
-    <ProjectReference Include="..\DEVinCar.infra\DEVinCar.infra.csproj" />
+    <ProjectReference Include="..\DEVinCar.Di\DEVinCar.Di.csproj" />
   </ItemGroup>
 
 </Project>
