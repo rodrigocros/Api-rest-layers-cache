@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using DEVinCar.Domain.ViewModels;
 using DEVinCar.Domain.Interfaces.Services;
+using AutoMapper;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -12,11 +13,13 @@ namespace DEVinCar.Api.Controllers;
 
 public class AddressesController : ControllerBase
 {
+    private readonly IMapper _mapper;
     private readonly IAddressService _adressService;
 
-    public AddressesController(IAddressService adressService)
+    public AddressesController(IAddressService adressService, IMapper mapper)
     {
         adressService = _adressService;
+        mapper = _mapper;
     }
 
     // [HttpGet]

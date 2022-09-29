@@ -3,6 +3,7 @@ using DEVinCar.Domain.DTOs;
 using DEVinCar.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using DEVinCar.Domain.Interfaces.Services;
+using AutoMapper;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -11,10 +12,13 @@ namespace DEVinCar.Api.Controllers;
 public class CarController : ControllerBase
 {
     private readonly ICarService _carService;
+    private readonly IMapper _mapper;
 
-    public CarController(ICarService carService)
+
+    public CarController(ICarService carService, IMapper mapper)
     {
         carService = _carService;
+        mapper = _mapper;
     }
 
     // [HttpGet("{carId}")]

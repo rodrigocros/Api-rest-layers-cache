@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Runtime.ConstrainedExecution;
 using DEVinCar.Domain.Interfaces.Services;
+using AutoMapper;
 
 namespace DEVinCar.Api.Controllers
 {
@@ -12,9 +13,12 @@ namespace DEVinCar.Api.Controllers
     public class DeliverController : ControllerBase
     {
         private readonly IDeliveryService _deliveryservice;
-        public DeliverController(IDeliveryService _deliveryservice)
+        private readonly IMapper _mapper;
+
+        public DeliverController(IDeliveryService _deliveryservice, IMapper mapper)
         {
             _deliveryservice = _deliveryservice;
+            mapper = _mapper;
         }
 
         // [HttpGet]

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DEVinCar.Domain.ViewModels;
 using DEVinCar.Domain.Interfaces.Services;
+using AutoMapper;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -13,9 +14,13 @@ namespace DEVinCar.Api.Controllers;
 public class SalesController : ControllerBase
 {
     private readonly ISaleService _saleservice;
-    public SalesController(ISaleService saleservice)
+    private readonly IMapper _mapper;
+
+    public SalesController(ISaleService saleservice, IMapper mapper)
     {
         saleservice = _saleservice;
+        mapper = _mapper;
+
     }
 
     // [HttpGet("{saleId}")]

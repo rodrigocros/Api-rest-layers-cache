@@ -2,6 +2,7 @@
 using DEVinCar.Domain.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using DEVinCar.Domain.Interfaces.Services;
+using AutoMapper;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -11,10 +12,13 @@ namespace DEVinCar.Api.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IMapper _mapper;
 
-    public UserController(IUserService userService)
+
+    public UserController(IUserService userService, IMapper mapper)
     {
        userService = _userService;
+       mapper = _mapper;
     }
 
 //     [HttpGet]

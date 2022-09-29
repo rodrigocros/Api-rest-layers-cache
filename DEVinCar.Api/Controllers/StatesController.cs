@@ -4,6 +4,7 @@ using DEVinCar.Domain.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using DEVinCar.Domain.Interfaces.Services;
+using AutoMapper;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -12,10 +13,13 @@ namespace DEVinCar.Api.Controllers;
 public class StatesController : ControllerBase
 {
     private readonly IStateService _stateservice;
+    private readonly IMapper _mapper;
 
-    public StatesController(IStateService _stateservice)
+
+    public StatesController(IStateService _stateservice, IMapper mapper)
     {
         _stateservice = _stateservice;
+        mapper = _mapper;
     }
 
     // [HttpPost("{stateId}/city")]

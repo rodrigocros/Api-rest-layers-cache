@@ -3,6 +3,10 @@ using DEVinCar.Domain.Interfaces.Repositories;
 using DEVinCar.Domain.Interfaces.Services;
 using DEVinCar.Domain.Service;
 using DEVinCar.Di;
+using AutoMapper;
+using DEVinCar.Domain.DTOs;
+using DEVinCar.Domain.Models;
+using DEVinCar.Api.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,14 +33,12 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStateService, StateService>();
 
 
-
-
+builder.Services.AddSingleton(AutoMapperConfiguration.Configure());
 
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 
 var app = builder.Build();
