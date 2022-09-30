@@ -12,7 +12,7 @@ namespace DEVinCar.Domain.Interfaces.Services
     {
         IList<Address> Get();
         Address GetById(int id);
-        void Inserir(AdressDTO adress);
-        void Excluir (AdressDTO adress);
+        void Inserir(Address address);
+        void Excluir (Address address);
     }
 }

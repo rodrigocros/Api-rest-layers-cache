@@ -14,11 +14,11 @@ namespace DEVinCar.Domain.Service
         private readonly IDeliveryRepository _carRepository;
         public DeliveryService(IDeliveryRepository carRepository)
         {
-            carRepository = _carRepository;
+            _carRepository = carRepository;
             
         }
 
-        public void Excluir(DeliveryDTO car)
+        public void Excluir(Delivery delivery)
         {
             throw new NotImplementedException();
         }
@@ -33,7 +33,7 @@ namespace DEVinCar.Domain.Service
             throw new NotImplementedException();
         }
 
-        public void Inserir(DeliveryDTO car)
+        public void Inserir(Delivery delivery)
         {
             throw new NotImplementedException();
         }

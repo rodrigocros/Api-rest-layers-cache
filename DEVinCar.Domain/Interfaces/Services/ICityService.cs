@@ -11,7 +11,7 @@ namespace DEVinCar.Domain.Interfaces.Services
     {
         IList<City> Get();
         City GetById(int id);
-        void Inserir(CityDTO car);
-        void Excluir (CityDTO car);
+        void Inserir(City city);
+        void Excluir (City city);
     }
 }

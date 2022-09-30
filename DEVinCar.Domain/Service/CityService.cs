@@ -14,10 +14,10 @@ namespace DEVinCar.Domain.Service
         private readonly ICityRepository _cityrepository;
         public CityService(ICityRepository cityrepository)
         {
-            cityrepository = _cityrepository;   
+            _cityrepository = cityrepository;   
         }
 
-        public void Excluir(CityDTO car)
+        public void Excluir(City city)
         {
             throw new NotImplementedException();
         }
@@ -32,7 +32,7 @@ namespace DEVinCar.Domain.Service
             throw new NotImplementedException();
         }
 
-        public void Inserir(CityDTO car)
+        public void Inserir(City city)
         {
             throw new NotImplementedException();
         }

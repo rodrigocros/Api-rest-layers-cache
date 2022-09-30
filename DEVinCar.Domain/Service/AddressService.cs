@@ -14,9 +14,10 @@ namespace DEVinCar.Domain.Service
         private readonly IAddressResitory _addressRepository;
         public AddressService(IAddressResitory addressRepository)
         {
-            addressRepository = _addressRepository;
+            _addressRepository = addressRepository;
         }
-        public void Excluir(AdressDTO adress)
+
+        public void Excluir(Address adress)
         {
             throw new NotImplementedException();
         }
@@ -31,7 +32,7 @@ namespace DEVinCar.Domain.Service
             throw new NotImplementedException();
         }
 
-        public void Inserir(AdressDTO adress)
+        public void Inserir(Address adress)
         {
             throw new NotImplementedException();
         }

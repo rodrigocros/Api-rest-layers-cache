@@ -11,7 +11,7 @@ namespace DEVinCar.Domain.Interfaces.Services
     {
         IList<Delivery> Get();
         Delivery GetById(int id);
-        void Inserir(DeliveryDTO car);
-        void Excluir (DeliveryDTO car);
+        void Inserir(Delivery delivery);
+        void Excluir (Delivery delivery);
     }
 }

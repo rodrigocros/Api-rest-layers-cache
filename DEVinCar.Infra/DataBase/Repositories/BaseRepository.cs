@@ -10,7 +10,7 @@ namespace DEVinCar.Infra.DataBase.Repositories
         protected readonly DevInCarDbContext _context;
         public BaseRepository(DevInCarDbContext context)
         {
-            context = _context;
+            _context = context;
         }
 
         public virtual IList<TEntity> ObterTodos(){

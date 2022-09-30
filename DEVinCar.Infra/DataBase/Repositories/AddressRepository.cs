@@ -11,7 +11,6 @@ namespace DEVinCar.Infra.DataBase.Repositories
     {
         public AddressRepository(DevInCarDbContext context) : base(context)
         {
-            context = _context;
         }
     }
 }

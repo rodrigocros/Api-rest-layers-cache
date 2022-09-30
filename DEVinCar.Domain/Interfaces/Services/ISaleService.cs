@@ -11,7 +11,7 @@ namespace DEVinCar.Domain.Interfaces.Services
     {
         IList<Sale> Get();
         Sale GetById(int id);
-        void Inserir(SaleDTO car);
-        void Excluir (SaleDTO car);
+        void Inserir(Sale sale);
+        void Excluir (Sale sale);
     }
 }

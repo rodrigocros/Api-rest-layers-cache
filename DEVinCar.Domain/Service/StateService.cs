@@ -18,7 +18,7 @@ namespace DEVinCar.Domain.Service
             _staterepository = staterepository;
         }
 
-        public void Excluir(StateDTO car)
+        public void Excluir(State state)
         {
             throw new NotImplementedException();
         }
@@ -33,7 +33,7 @@ namespace DEVinCar.Domain.Service
             throw new NotImplementedException();
         }
 
-        public void Inserir(StateDTO car)
+        public void Inserir(State state)
         {
             throw new NotImplementedException();
         }
