@@ -14,10 +14,10 @@ namespace DEVinCar.Domain.Service
         private readonly ICarRepository _carRepository;
         public CarService(ICarRepository carRepository)
         { 
-            carRepository = _carRepository;
+            _carRepository = carRepository;
         }
 
-        public void Excluir(CarDTO car)
+        public void Excluir(Car car)
         {
             throw new NotImplementedException();
         }
@@ -32,7 +32,7 @@ namespace DEVinCar.Domain.Service
             throw new NotImplementedException();
         }
 
-        public void Inserir(CarDTO car)
+        public void Inserir(Car car)
         {
             throw new NotImplementedException();
         }

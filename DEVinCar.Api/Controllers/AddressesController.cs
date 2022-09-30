@@ -18,8 +18,8 @@ public class AddressesController : ControllerBase
 
     public AddressesController(IAddressService adressService, IMapper mapper)
     {
-        adressService = _adressService;
-        mapper = _mapper;
+        _adressService = adressService;
+        _mapper = mapper;
     }
 
     // [HttpGet]

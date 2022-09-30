@@ -18,8 +18,8 @@ public class SalesController : ControllerBase
 
     public SalesController(ISaleService saleservice, IMapper mapper)
     {
-        saleservice = _saleservice;
-        mapper = _mapper;
+        _saleservice = saleservice;
+        _mapper = mapper;
 
     }
 

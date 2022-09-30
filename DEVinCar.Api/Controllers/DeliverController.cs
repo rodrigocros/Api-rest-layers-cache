@@ -15,10 +15,10 @@ namespace DEVinCar.Api.Controllers
         private readonly IDeliveryService _deliveryservice;
         private readonly IMapper _mapper;
 
-        public DeliverController(IDeliveryService _deliveryservice, IMapper mapper)
+        public DeliverController(IDeliveryService deliveryservice, IMapper mapper)
         {
-            _deliveryservice = _deliveryservice;
-            mapper = _mapper;
+            _deliveryservice = deliveryservice;
+            _mapper = mapper;
         }
 
         // [HttpGet]

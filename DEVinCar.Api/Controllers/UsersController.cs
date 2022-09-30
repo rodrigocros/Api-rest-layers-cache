@@ -17,8 +17,8 @@ public class UserController : ControllerBase
 
     public UserController(IUserService userService, IMapper mapper)
     {
-       userService = _userService;
-       mapper = _mapper;
+       _userService = userService;
+       _mapper = mapper;
     }
 
 //     [HttpGet]

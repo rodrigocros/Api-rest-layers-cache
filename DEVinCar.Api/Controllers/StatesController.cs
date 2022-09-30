@@ -16,10 +16,10 @@ public class StatesController : ControllerBase
     private readonly IMapper _mapper;
 
 
-    public StatesController(IStateService _stateservice, IMapper mapper)
+    public StatesController(IStateService stateservice, IMapper mapper)
     {
-        _stateservice = _stateservice;
-        mapper = _mapper;
+        _stateservice = stateservice;
+        _mapper = mapper;
     }
 
     // [HttpPost("{stateId}/city")]

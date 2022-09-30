@@ -17,8 +17,8 @@ public class CarController : ControllerBase
 
     public CarController(ICarService carService, IMapper mapper)
     {
-        carService = _carService;
-        mapper = _mapper;
+        _carService = carService;
+        _mapper = mapper;
     }
 
     // [HttpGet("{carId}")]
