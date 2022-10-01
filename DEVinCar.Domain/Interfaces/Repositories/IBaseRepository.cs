@@ -14,5 +14,6 @@ namespace DEVinCar.Domain.Interfaces.Repositories
         void Inserir(TEntity entity);
         void Excluir (TEntity entity);
         void Atualizar(TEntity entity);
+        IQueryable<TEntity> Query();
     }
 }

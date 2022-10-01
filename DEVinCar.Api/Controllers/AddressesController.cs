@@ -15,70 +15,33 @@ public class AddressesController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly IAddressService _adressService;
+    private readonly IDeliveryService _deliveryService;
 
-    public AddressesController(IAddressService adressService, IMapper mapper)
+    public AddressesController(IAddressService adressService, IMapper mapper, IDeliveryService deliveryService)
     {
         _adressService = adressService;
         _mapper = mapper;
+        _deliveryService = deliveryService;
     }
 
-    // [HttpGet]
-    // public ActionResult<List<AddressViewModel>> Get([FromQuery] int? cityId,
-    //                                                 [FromQuery] int? stateId,
-    //                                                 [FromQuery] string street,
-    //                                                 [FromQuery] string cep)
-    // {
-    //     var query = _context.Addresses.AsQueryable();
+    [HttpGet]
+    public ActionResult<List<AddressViewModel>> Get([FromQuery] int? cityId,
+                                                    [FromQuery] int? stateId,
+                                                    [FromQuery] string street,
+                                                    [FromQuery] string cep)
+    {
+        var query = _adressService.GetList(cityId,stateId,street,cep);
+        return Ok(query);
 
-    //     if (cityId.HasValue)
-    //     {
-    //         query = query.Where(a => a.CityId == cityId);
-    //     }
-    //     if (stateId.HasValue)
-    //     {
-    //         query = query.Where(a => a.City.StateId == stateId);
-    //     }
-
-    //     if (!string.IsNullOrEmpty(street))
-    //     {
-    //         street = street.ToUpper();
-    //         query = query.Where(a => a.Street.Contains(street));
-    //     }
-
-    //     if (!string.IsNullOrEmpty(cep))
-    //     {
-    //         query = query.Where(a => a.Cep == cep);
-    //     }
-
-    //     if (!query.ToList().Any())
-    //     {
-    //         return NoContent();
-    //     }
-
-    //     List<AddressViewModel> addressesViewModel = new List<AddressViewModel>();
-    //     query
-    //         .Include(a => a.City)
-    //         .ToList().ForEach(address => {
-    //         addressesViewModel.Add(new AddressViewModel(address.Id,
-    //                                                     address.Street,
-    //                                                     address.CityId,
-    //                                                     address.City.Name,
-    //                                                     address.Number,
-    //                                                     address.Complement,
-    //                                                     address.Cep));
-    //     });
-    //     return Ok(addressesViewModel);
-
-    // }
+    }
 
     // [HttpPatch("{addressId}")]
     // public ActionResult<AddressViewModel> Patch([FromRoute] int addressId,
     //                                    [FromBody] AddressPatchDTO addressPatchDTO)
     // {
 
-    //     Address address = _context.Addresses
-    //                               .Include(a => a.City)
-    //                               .FirstOrDefault(a => a.Id == addressId);
+    //     // Address address = _context.Addresses.Include(a => a.City).FirstOrDefault(a => a.Id == addressId);
+    //      Address address = _adressService.GetById(addressId);
 
     //     if (address == null)
     //         return NotFound($"The address with ID: {addressId} not found.");
@@ -127,27 +90,27 @@ public class AddressesController : ControllerBase
     //     return Ok(addressViewModel);
     // }
 
-    // [HttpDelete("{addressId}")]
+    [HttpDelete("{addressId}")]
 
-    // public ActionResult DeleteById([FromRoute] int addressId)
-    // {
-    //     Address address = _context.Addresses.Find(addressId);
+    public ActionResult DeleteById([FromRoute] int addressId)
+    {
+        var address = _adressService.GetById(addressId);
+        // Address address = _context.Addresses.Find(addressId);
 
-    //     if (address == null)
-    //     {
-    //         return NotFound($"The address with ID: {addressId} not found.");
-    //     }
+        if (address == null)
+        {
+            return NotFound($"The address with ID: {addressId} not found.");
+        }
 
-    //     Delivery relation = _context.Deliveries.FirstOrDefault(d => d.AddressId == addressId);
+        // var relation = _context.Deliveries.FirstOrDefault(d => d.AddressId == addressId);
+        var relation = _deliveryService.GetById(addressId);
 
-    //     if (relation != null)
-    //     {
-    //         return BadRequest($"The address with ID: {addressId} is related to a delivery.");
-    //     }
 
-    //     _context.Addresses.Remove(address);
-    //     _context.SaveChanges();
+        if (relation != null)
+        {
+            return BadRequest($"The address with ID: {addressId} is related to a delivery.");
+        }
 
-    //     return NoContent();
-    // }
+        return NoContent();
+    }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DEVinCar.Domain.DTOs;
+using DEVinCar.Domain.Exceptions;
 using DEVinCar.Domain.Interfaces.Repositories;
 using DEVinCar.Domain.Interfaces.Services;
 using DEVinCar.Domain.Models;
@@ -11,31 +12,40 @@ namespace DEVinCar.Domain.Service
 {
     public class DeliveryService : IDeliveryService
     {
-        private readonly IDeliveryRepository _carRepository;
-        public DeliveryService(IDeliveryRepository carRepository)
+        private readonly IDeliveryRepository _deliveryRepository;
+        public DeliveryService(IDeliveryRepository deliveryRepository)
         {
-            _carRepository = carRepository;
+            _deliveryRepository = deliveryRepository;
             
         }
 
-        public void Excluir(Delivery delivery)
+
+        public IList<Delivery> Get(int? saleId, int? addressId)
         {
-            throw new NotImplementedException();
+           var query =  _deliveryRepository.Query();
+
+           if (addressId.HasValue)
+            {
+                query = query.Where(a => a.AddressId == addressId);
+            }
+
+            if (saleId != null)
+            {
+                query = query.Where(s => s.SaleId == saleId);
+            }
+                      
+            if (!query.ToList().Any())
+            {
+                throw new NaoExisteException("Nao existe endereco informado");
+            }
+
+            return query.ToList();
+        }
+         public Delivery GetById(int id)
+        {
+            return  _deliveryRepository.ObterPorID(id);
+         
         }
 
-        public IList<Delivery> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Delivery GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Inserir(Delivery delivery)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

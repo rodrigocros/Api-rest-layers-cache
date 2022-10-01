@@ -25,12 +25,16 @@ namespace DEVinCar.Infra.DataBase.Repositories
             _context.SaveChanges(); 
         }
         public virtual TEntity ObterPorID(Tkey id){
-            return _context.Set<TEntity>().Find(id);
+            return _context.Set<TEntity>().Find(id);           
+
         }
         public virtual void Excluir(TEntity entity){
             _context.Set<TEntity>().Remove(entity);
             _context.SaveChanges(); 
 
+        }
+        public IQueryable<TEntity> Query(){
+            return _context.Set<TEntity>().AsQueryable();
         }
     }
 }

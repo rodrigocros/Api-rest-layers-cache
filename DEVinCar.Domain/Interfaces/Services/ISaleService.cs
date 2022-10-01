@@ -13,5 +13,6 @@ namespace DEVinCar.Domain.Interfaces.Services
         Sale GetById(int id);
         void Inserir(Sale sale);
         void Excluir (Sale sale);
+
     }
 }
