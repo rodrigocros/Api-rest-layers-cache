@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using DEVinCar.Domain.Interfaces.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -13,12 +14,14 @@ namespace DEVinCar.Api.Controllers;
 [Authorize(Roles = "Gerente")]
 public class CarController : ControllerBase
 {
+    private readonly IMemoryCache _cache;
     private readonly ICarService _carService;
     private readonly IMapper _mapper;
 
 
-    public CarController(ICarService carService, IMapper mapper)
+    public CarController(ICarService carService, IMapper mapper, IMemoryCache cache)
     {
+        _cache = cache;
         _carService = carService;
         _mapper = mapper;
     }
@@ -26,7 +29,18 @@ public class CarController : ControllerBase
     [HttpGet("{carId}")]
     public ActionResult<Car> GetById([FromRoute] int carId)
     {
+        var carcache = _cache.Get($"Carro:{carId}");
+        var carDB = _carService.GetById(carId);
+
+        if(carcache != null){
+            
+            _cache.Set($"aluno:{carId}", carDB);
+            return Ok(carcache);
+        }
+
+        
         var car = _carService.GetById(carId);
+
         // var car = _context.Cars.Find(carId);
         if (car == null) return NotFound();
         return Ok(car);
