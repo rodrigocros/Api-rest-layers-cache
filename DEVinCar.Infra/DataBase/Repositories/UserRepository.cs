@@ -15,5 +15,8 @@ namespace DEVinCar.Infra.DataBase.Repositories
         public User GetByEmail(String email){
             return _context.Users.FirstOrDefault(u => u.Email == email);
         }
+        public User GetByEmailPassword(string email, string password){
+            return _context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
+        }
     }
 }

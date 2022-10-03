@@ -9,6 +9,8 @@ namespace DEVinCar.Domain.Interfaces.Repositories
     public interface IUserRepository : IBaseRepository<User, int>
     {   
         User GetByEmail(String email);
+        User GetByEmailPassword(string email, string password);
+
 
     }
 }

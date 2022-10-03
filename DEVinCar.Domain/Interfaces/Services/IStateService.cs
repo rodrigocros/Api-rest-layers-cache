@@ -13,5 +13,15 @@ namespace DEVinCar.Domain.Interfaces.Services
         State GetById(int id);
         void Inserir(State state);
         void Excluir (State state);
+        City GetCitiesByName(string name);
+        void InserirOnCity(City city);
+        City GetCityById(int id);
+        List<City> GetCitiesAsQueryable();
+        void InsertOnAdress(Address adress);
+        List<State> GetListByName(string name);
+
+
+
+
     }
 }

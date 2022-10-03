@@ -32,6 +32,15 @@ namespace DEVinCar.Domain.Service
             throw new NotImplementedException();
         }
 
+        public City GetByName(string name)
+        {
+            var cityTodos = _cityrepository.Query();
+            // var cityTodos =  _cityrepository.ObterTodos();
+            var city = cityTodos.Where( c => c.Name == name);
+            return city.FirstOrDefault();
+
+        }
+
         public void Inserir(City city)
         {
             throw new NotImplementedException();

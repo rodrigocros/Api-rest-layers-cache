@@ -6,36 +6,80 @@ using DEVinCar.Domain.DTOs;
 using DEVinCar.Domain.Interfaces.Repositories;
 using DEVinCar.Domain.Interfaces.Services;
 using DEVinCar.Domain.Models;
+using DEVinCar.Domain.ViewModels;
 
 namespace DEVinCar.Domain.Service
 {
     public class StateService : IStateService
     {
         private readonly IStateRepository _staterepository;
+        private readonly ICityRepository _cityrepository;
+        private readonly ICityService   _cityService;
+        private readonly IAddressService _addressService;
 
-        public StateService(IStateRepository staterepository)
+        public StateService(IStateRepository staterepository, ICityRepository cityrepository,ICityService cityService, IAddressService addressService)
         {
             _staterepository = staterepository;
+            _cityrepository = cityrepository;
+            _cityService = cityService;
+            _addressService = addressService;
         }
 
         public void Excluir(State state)
         {
-            throw new NotImplementedException();
+            _staterepository.Excluir(state);
         }
 
         public IList<State> Get()
         {
-            throw new NotImplementedException();
+            return _staterepository.ObterTodos();
         }
 
         public State GetById(int id)
         {
-            throw new NotImplementedException();
+            return _staterepository.ObterPorID(id);
         }
 
         public void Inserir(State state)
         {
-            throw new NotImplementedException();
+            _staterepository.Inserir(state);
         }
+
+        public City GetCitiesByName(string name)
+        {
+            return _cityService.GetByName(name);
+        }
+        public void InserirOnCity(City city)
+        {
+            _cityrepository.Inserir(city);
+        }
+        public City GetCityById(int id)
+        {
+            return _cityrepository.ObterPorID(id);
+        }
+        public void InsertOnAdress(Address adress){
+            _addressService.Inserir(adress);
+        }
+        public List<State> GetListByName(string name){
+            // var todosState = _staterepository.ObterTodos();
+            // var state = todosState.Where(c => c.Name == name);
+            // return state.FirstOrDefault();
+             var query = _staterepository.Query();
+
+              // var query = _context.States.AsQueryable();
+
+            if(!string.IsNullOrEmpty(name)) {
+                query = query.Where(s => s.Name.ToUpper().Contains(name.ToUpper()));
+            }
+           
+            return query.ToList();
+            
+        }
+
+        public List<City> GetCitiesAsQueryable()
+        {
+            return (List<City>)_cityrepository.Query();
+        }
+
     }
 }

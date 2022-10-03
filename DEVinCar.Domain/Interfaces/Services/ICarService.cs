@@ -13,5 +13,8 @@ namespace DEVinCar.Domain.Interfaces.Services
         Car GetById(int id);
         void Inserir(Car car);
         void Excluir (Car car);
+        IList<Car> GetFiltered(string name, decimal? priceMin,decimal? priceMax);
+        SaleCar GetSaleCarPorId(int id);
+
     }
 }

@@ -12,5 +12,7 @@ namespace DEVinCar.Infra.DataBase.Repositories
         public StateRepository(DevInCarDbContext context) : base(context)
         {
         }
+
     }
+    
 }

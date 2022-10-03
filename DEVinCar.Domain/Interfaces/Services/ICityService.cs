@@ -13,5 +13,7 @@ namespace DEVinCar.Domain.Interfaces.Services
         City GetById(int id);
         void Inserir(City city);
         void Excluir (City city);
+        City GetByName(string name);
+
     }
 }

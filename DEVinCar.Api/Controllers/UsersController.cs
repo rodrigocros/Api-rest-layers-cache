@@ -138,14 +138,16 @@ public class UserController : ControllerBase
         }
  
         
-        var buy = new Sale
+        var sale = new Sale
         {
             BuyerId = seller.Id,
             SellerId = body.SellerId,
             SaleDate = body.SaleDate,
         };
 
-        return Created("api/user/{userId}/buy", buy.Id);
+        _saleService.Inserir(sale);
+
+        return Created("api/user/{userId}/buy", sale.Id);
     }
       
 
