@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DEVinCar.Domain.DTOs;
 using DEVinCar.Domain.Interfaces.Repositories;
 using DEVinCar.Domain.Interfaces.Services;
 using DEVinCar.Domain.Models;
@@ -13,13 +14,13 @@ namespace DEVinCar.Domain.Service
         private readonly IUserRepository _userRepository;
          LoginService(IUserRepository userRepository)
         {
-            userRepository = _userRepository;
+            _userRepository = userRepository;
         }
 
-        public User ObterPorUsuarioESenha(string email, string password){
+        public User ObterPorUsuarioESenha(UserLoginDTO userloginDTO){
 
-            return _userRepository.GetByEmailPassword(email, password);
-
+            var user =  _userRepository.GetByEmailPassword(userloginDTO);
+            return user;
         }
     }
 }

@@ -34,6 +34,7 @@ public class SalesController : ControllerBase
         return Ok(sales);
     }
 
+    // [Authorize(Roles = "Gerente")]
     // [HttpPost("{saleId}/item")]
     // public ActionResult<SaleCar> PostSale(
     //    [FromBody] SaleCarDTO body,

@@ -15,6 +15,8 @@ namespace DEVinCar.Domain.Interfaces.Services
         void Excluir (User user);
         IList<Sale> GetSellerByID(int buyerid);
         IList<Sale> GetBuyerByID(int buyerId);
+        User ObterPorUsuarioESenha(UserLoginDTO userloginDTO);
+
 
     }
 }
