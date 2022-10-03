@@ -64,5 +64,9 @@ namespace DEVinCar.Domain.Service
 
             _saleRepository.Inserir(sale);
         }
+        public List<Sale> SaleAsQueryable()
+        {
+            return (List<Sale>)_saleRepository.Query();
+        }
     }
 }

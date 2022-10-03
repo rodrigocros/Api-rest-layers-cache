@@ -22,210 +22,227 @@ public class StatesController : ControllerBase
         _mapper = mapper;
     }
 
-    // [HttpPost("{stateId}/city")]
-    // public ActionResult<int> PostCity(
-    //     [FromRoute] int stateId,
-    //     [FromBody] CityDTO cityDTO
-    // )
-    // {
-    //     var state = _context.States.Find(stateId);
+    [HttpPost("{stateId}/city")]
+    public ActionResult<int> PostCity(
+        [FromRoute] int stateId,
+        [FromBody] CityDTO cityDTO
+    )
+    {
+        var state = _stateservice.GetById(stateId);
+        // var state = _context.States.Find(stateId);
 
-    //     if (state == null)
-    //     {
-    //         return NotFound();
-    //     }
+        if (state == null)
+        {
+            return NotFound();
+        }
+        var city = _stateservice.GetCitiesByName(cityDTO.Name);
+        // if (_context.Cities.Any(c => c.StateId == state.Id && c.Name == cityDTO.Name))
+        if(state.Id == stateId && state.Name == city.Name)
+        {
+            return BadRequest();
+        }
 
-    //     if (_context.Cities.Any(c => c.StateId == state.Id && c.Name == cityDTO.Name))
-    //     {
-    //         return BadRequest();
-    //     }
+        var newCity = new City
+        {
+            Name = cityDTO.Name,
+            StateId = stateId,
+        };
 
-    //     var city = new City
-    //     {
-    //         Name = cityDTO.Name,
-    //         StateId = stateId,
-    //     };
+        _stateservice.InserirOnCity(city);
 
-    //     _context.Cities.Add(city);
+        // _context.Cities.Add(city);
+        // _context.SaveChanges();
 
-    //     _context.SaveChanges();
+        return Created("api/{stateId}/city", newCity.Id);
+    }
 
-    //     return Created("api/{stateId}/city", city.Id);
-    // }
+    [HttpPost("{stateId}/city/{cityId}/address")]
+    public ActionResult<int> PostAdress(
+        [FromRoute] int stateId,
+        [FromRoute] int cityId,
+        [FromBody] AdressDTO body)
+    {
+        var idState = _stateservice.GetById(stateId);
+        // var idState = _context.States.Find(stateId);
 
-    // [HttpPost("{stateId}/city/{cityId}/address")]
-    // public ActionResult<int> PostAdress(
-    //     [FromRoute] int stateId,
-    //     [FromRoute] int cityId,
-    //     [FromBody] AdressDTO body)
-    // {
-    //     var idState = _context.States.Find(stateId);
-    //     var idCity = _context.Cities.Find(cityId);
+        var idCity = _stateservice.GetCityById(cityId);
 
-    //     if (idState == null || idCity == null)
-    //     {
-    //         return NotFound();
-    //     }
+        // var idCity = _context.Cities.Find(cityId);
 
-    //     if (idCity.StateId != idState.Id)
-    //     {
-    //         return BadRequest();
-    //     }
+        if (idState == null || idCity == null)
+        {
+            return NotFound();
+        }
 
-    //     var address = new Address
-    //     {
-    //         CityId = cityId,
-    //         Street = body.Street,
-    //         Number = body.Number,
-    //         Cep = body.Cep,
-    //         Complement = body.Complement,
-    //         City = idCity
+        if (idCity.StateId != idState.Id)
+        {
+            return BadRequest();
+        }
 
-    //     };
-    //     _context.Addresses.Add(address);
-    //     _context.SaveChanges();
-    //     return Created($"api/state/{stateId}/city/{cityId}/", address.Id);
-    // }
+        var address = new Address
+        {
+            CityId = cityId,
+            Street = body.Street,
+            Number = body.Number,
+            Cep = body.Cep,
+            Complement = body.Complement,
+            City = idCity
 
-    // [HttpGet("{stateId}/city/{cityId}")]
+        };
+        // _context.Addresses.Add(address);
+        // _context.SaveChanges();
 
-    // public ActionResult<GetCityByIdViewModel> GetCityById
-    // (
-    //     [FromRoute] int stateId,
-    //     [FromRoute] int cityId
-    // )
-    // {
-    //     var idState = _context.States.Find(stateId);
-    //     var idCity = _context.Cities.Find(cityId);
+        _stateservice.InsertOnAdress(address);
 
-    //     if (idState == null || idCity == null)
-    //     {
-    //         return NotFound();
-    //     }
+        return Created($"api/state/{stateId}/city/{cityId}/", address.Id);
+    }
 
-    //     if (idCity.StateId != idState.Id)
-    //     {
-    //         return BadRequest();
-    //     }
+    [HttpGet("{stateId}/city/{cityId}")]
 
-    //     GetCityByIdViewModel body = new GetCityByIdViewModel(
-    //         idCity.Id,
-    //         idCity.Name,
-    //         idState.Id,
-    //         idState.Name,
-    //         idState.Initials
-    //     );
+    public ActionResult<GetCityByIdViewModel> GetCityById
+    (
+        [FromRoute] int stateId,
+        [FromRoute] int cityId
+    )
+    {
+        var idState = _stateservice.GetById(stateId);
+        // var idState = _context.States.Find(stateId);
+        var idCity = _stateservice.GetCityById(cityId);
+        // var idCity = _context.Cities.Find(cityId);
 
-    //     return Ok(body);
-    // }
+        if (idState == null || idCity == null)
+        {
+            return NotFound();
+        }
 
-    // [HttpGet("{stateId}")]
-    // public ActionResult<GetStateByIdViewModel> GetStateById(
-    //         [FromRoute] int stateId
-    //     )
-    // {
-    //     var filterState = _context.States.Find(stateId);
-    //     if (filterState == null)
-    //     {
-    //         return NotFound("There is no given with this id");
-    //     }
+        if (idCity.StateId != idState.Id)
+        {
+            return BadRequest();
+        }
 
-    //     var response = new GetStateByIdViewModel(
-    //         filterState.Id,
-    //         filterState.Name,
-    //         filterState.Initials
-    //         );
+        GetCityByIdViewModel body = new GetCityByIdViewModel(
+            idCity.Id,
+            idCity.Name,
+            idState.Id,
+            idState.Name,
+            idState.Initials
+        );
+
+        return Ok(body);
+    }
+
+    [HttpGet("{stateId}")]
+    public ActionResult<GetStateByIdViewModel> GetStateById(
+            [FromRoute] int stateId
+        )
+    {
+        var filterState = _stateservice.GetById(stateId);
+        // var filterState = _context.States.Find(stateId);
+        if (filterState == null)
+        {
+            return NotFound("There is no given with this id");
+        }
+
+        var response = new GetStateByIdViewModel(
+            filterState.Id,
+            filterState.Name,
+            filterState.Initials
+            );
        
-    //     return Ok(response);
-    // }
+        return Ok(response);
+    }
 
-    // [HttpGet]
-    // public ActionResult<List<GetStateViewModel>> Get([FromQuery] string name) {
-    //     var query = _context.States.AsQueryable();
+    [HttpGet]
+    public ActionResult<List<GetStateViewModel>> Get([FromQuery] string name) {
 
-    //     if(!string.IsNullOrEmpty(name)) {
-    //         query = query.Where(s => s.Name.ToUpper().Contains(name.ToUpper()));
-    //     }
-    //     if(query.Any()) {
-    //         List<GetStateViewModel> getStateViewModels = new List<GetStateViewModel>();
-    //         query
-    //             .Include(s => s.Cities)
-    //             .ToList().ForEach(state =>
-    //             {
-    //                 GetStateViewModel getState = new GetStateViewModel(state.Id, state.Name, state.Initials);
-    //                 state.Cities.ForEach(city =>
-    //                 {
-    //                     getState.Cities.Add(city.Name);
-    //                 });
-    //                 getStateViewModels.Add(getState);
-    //             });
-    //         return Ok(getStateViewModels);
-    //     }
+        var query = _stateservice.Get().AsQueryable();
+        // var query = _context.States.AsQueryable();
 
-    //     return NoContent();
-    // }
+        if(!string.IsNullOrEmpty(name)) {
+            query = query.Where(s => s.Name.ToUpper().Contains(name.ToUpper()));
+        }
+        if(query.Any()) {
+            List<GetStateViewModel> getStateViewModels = new List<GetStateViewModel>();
+            query
+                .Include(s => s.Cities)
+                .ToList().ForEach(state =>
+                {
+                    GetStateViewModel getState = new GetStateViewModel(state.Id, state.Name, state.Initials);
+                    state.Cities.ForEach(city =>
+                    {
+                        getState.Cities.Add(city.Name);
+                    });
+                    getStateViewModels.Add(getState);
+                });
+            return Ok(getStateViewModels);
+        }
 
-    // [HttpGet("{stateId}/city")]
-    // public ActionResult<GetCityByIdViewModel> GetCityByStateId(
-    //     [FromRoute] int stateId,
-    //     [FromQuery] string? name
-    //    )
+        return NoContent();
+    }
+
+    [HttpGet("{stateId}/city")]
+    public ActionResult<GetCityByIdViewModel> GetCityByStateId(
+        [FromRoute] int stateId,
+        [FromQuery] string name
+       )
     
-    // {
-    //     var state = _context.States.Find(stateId);
-    //     var cityStates = _context.Cities.Where(c => c.StateId == state.Id);
+    {
+        var state = _stateservice.GetById(stateId);
+        // var state = _context.States.Find(stateId);
+        // var cityStates = _context.Cities.Where(c => c.StateId == state.Id);
+        var cityStates = _stateservice.GetCitiesAsQueryable();
         
         
-    //     if (state == null)
-    //         return NotFound("State not found.");
+        if (state == null)
+            return NotFound("State not found.");
 
 
-    //     if (!string.IsNullOrEmpty(name))
-    //     {
-    //         var cityQuery = cityStates.Where(c => c.Name.ToUpper().Contains(name.ToUpper()));
+        if (!string.IsNullOrEmpty(name))
+        {
+            var cityQuery = cityStates.Where(c => c.Name.ToUpper().Contains(name.ToUpper()));
 
-    //         if (cityQuery.Count() == 0)
-    //         {
-    //             return NoContent();
-    //         }
+            if (cityQuery.Count() == 0)
+            {
+                return NoContent();
+            }
 
-    //         var queryResponse = cityQuery
-    //             .Select(c => new GetCityByIdViewModel(
-    //                 c.Id, 
-    //                 c.Name, 
-    //                 c.State.Id, 
-    //                 c.State.Name, 
-    //                 c.State.Initials))
-    //             .ToList();
+            var queryResponse = cityQuery
+                .Select(c => new GetCityByIdViewModel(
+                    c.Id, 
+                    c.Name, 
+                    c.State.Id, 
+                    c.State.Name, 
+                    c.State.Initials))
+                .ToList();
 
-    //         return Ok(queryResponse);
+            return Ok(queryResponse);
 
-    //     }
+        }
         
          
-    //     if (cityStates.Count() == 0)
-    //     {
-    //         return NoContent();
-    //     }
+        if (cityStates.Count() == 0)
+        {
+            return NoContent();
+        }
 
         
-    //     List<GetCityByIdViewModel> body = new();
-    //     cityStates.ToList().ForEach(
-    //         c => {
-    //             body.Add(new GetCityByIdViewModel(
-    //                 c.Id,
-    //                 c.Name,
-    //                 c.StateId,
-    //                 c.State.Name,
-    //                 c.State.Initials
-    //                 ));
+        List<GetCityByIdViewModel> body = new();
+        cityStates.ToList().ForEach(
+            c => {
+                body.Add(new GetCityByIdViewModel(
+                    c.Id,
+                    c.Name,
+                    c.StateId,
+                    c.State.Name,
+                    c.State.Initials
+                    ));
                                 
-    //         }
-    //         );
+            }
+            );
 
-    //     return Ok(body);
+        return Ok(body);
 
-    // }
+    }
 
 }
 

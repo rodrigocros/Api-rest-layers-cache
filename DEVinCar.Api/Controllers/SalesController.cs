@@ -23,32 +23,16 @@ public class SalesController : ControllerBase
 
     }
 
-    // [HttpGet("{saleId}")]
-    // public ActionResult<SaleViewModel> GetItensSale(
-    //     [FromRoute] int saleId)
-    // {
-    //     var sales = _context.Sales
-    //     .Include(s => s.Cars)
-    //     .Include(s => s.UserBuyer)
-    //     .Include(s => s.UserSeller)
-    //     .Where(s => s.Id == saleId)
-    //     .Select(s => new SaleViewModel
-    //     {
-    //         SellerName = s.UserSeller.Name,
-    //         BuyerName = s.UserBuyer.Name,
-    //         SaleDate = s.SaleDate,
-    //         Itens = s.Cars.Select(sc => new CarViewModel
-    //         {
-    //             Name = sc.Car.Name,
-    //             UnitPrice = sc.UnitPrice,
-    //             Amount = sc.Amount,
-    //             Total = sc.Sum(sc.UnitPrice, sc.Amount)
-    //         }).ToList()
-    //     })
-    //     .FirstOrDefault();
-    //     if (sales == null) return NotFound();
-    //     return Ok(sales);
-    // }
+    [HttpGet("{saleId}")]
+    public ActionResult<List<SaleDTO>> GetItensSale(
+        [FromRoute] int saleId)
+    {   
+        var sales = _saleservice.GetById(saleId);
+        if (sales == null) return NotFound();
+
+        var saleDTO = _mapper.Map<List<SaleDTO>>(sales);
+        return Ok(sales);
+    }
 
     // [HttpPost("{saleId}/item")]
     // public ActionResult<SaleCar> PostSale(

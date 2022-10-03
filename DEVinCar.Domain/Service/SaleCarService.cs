@@ -11,10 +11,10 @@ namespace DEVinCar.Domain.Service
 {
     public class SaleCarService : ISaleCarService
     {
-        private readonly ISaleRepository _saleRepository;
-        public SaleCarService(ISaleRepository saleRepository)
+        private readonly ISaleCarRepository _salecarRepository;
+        public SaleCarService(ISaleCarRepository salecarRepository)
         {
-            _saleRepository = saleRepository ;   
+            _salecarRepository = salecarRepository ;   
         }
 
         public void Excluir(SaleCar saleCar)
@@ -29,7 +29,7 @@ namespace DEVinCar.Domain.Service
 
         public SaleCar GetById(int id)
         {
-            throw new NotImplementedException();
+           return _salecarRepository.ObterPorID(id);
         }
 
         public void Inserir(SaleCar salecar)

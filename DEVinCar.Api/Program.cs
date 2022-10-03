@@ -7,19 +7,12 @@ using AutoMapper;
 using DEVinCar.Domain.DTOs;
 using DEVinCar.Domain.Models;
 using DEVinCar.Api.Config;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using DEVinCar.Domain.Security;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// builder.Services.AddDbContext<DevInCarDbContext>();
-
-// builder.Services.AddScoped<IAddressResitory, AddressRepository>();
-// builder.Services.AddScoped<ICarRepository, CarRepository>();
-// builder.Services.AddScoped<ICityRepository, CityRepository>();
-// builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
-// builder.Services.AddScoped<ISaleCarRepository, SaleCarRepository>();
-// builder.Services.AddScoped<ISaleRepository, SaleRepository>();
-// builder.Services.AddScoped<IStateRepository, StateRepository>();
-// builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.Register();
 
@@ -32,8 +25,32 @@ builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStateService, StateService>();
 
-
 builder.Services.AddSingleton(AutoMapperConfiguration.Configure());
+
+var key = Encoding.ASCII.GetBytes(Settings.Secret);
+
+builder.Services.AddAuthentication(_x_ =>{
+
+    _x_.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+
+    _x_.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;})
+
+.AddJwtBearer(_x_ =>{
+
+    _x_.RequireHttpsMetadata = false;
+
+    _x_.SaveToken = true;
+
+    _x_.TokenValidationParameters = new TokenValidationParameters {
+
+        ValidateIssuerSigningKey = true,
+
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+
+        ValidateIssuer = false,
+
+        ValidateAudience = false };});
+
 
 
 builder.Services.AddControllers();
@@ -53,6 +70,7 @@ if (app.Environment.IsDevelopment())
 // comentando para conseguir trabalhar com Insomnia/Postman via http comum
 //app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
