@@ -9,9 +9,8 @@ namespace DEVinCar.Domain.Interfaces.Services
 {
     public interface IDeliveryService
     {
-        IList<Delivery> Get();
+        IList<Delivery> Get(int? addressId, int? saleId);
         Delivery GetById(int id);
-        void Inserir(Delivery delivery);
-        void Excluir (Delivery delivery);
+
     }
 }

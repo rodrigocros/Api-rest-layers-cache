@@ -8,6 +8,9 @@ namespace DEVinCar.Domain.Interfaces.Repositories
 {
     public interface ISaleRepository : IBaseRepository<Sale, int>
     {
-        
+ 
+        IList<Sale> BuyerByID(int sellerid);
+        IList<Sale> SellerByID(int buyerid);
     }
+    
 }

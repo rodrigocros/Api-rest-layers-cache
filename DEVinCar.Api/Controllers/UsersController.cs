@@ -13,204 +13,156 @@ public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly ISaleService _saleService;
 
 
-    public UserController(IUserService userService, IMapper mapper)
+    public UserController(IUserService userService, IMapper mapper,ISaleService saleService )
     {
+        _saleService = saleService;
        _userService = userService;
        _mapper = mapper;
     }
 
-//     [HttpGet]
-//     public ActionResult<List<User>> Get(
-//        [FromQuery] string Name,
-//        [FromQuery] DateTime? birthDateMax,
-//        [FromQuery] DateTime? birthDateMin
-//    )
-//     {
-//         var query = _context.Users.AsQueryable();
+    [HttpGet]
+    public ActionResult<List<User>> Get(
+       [FromQuery] string name,
+       [FromQuery] DateTime? birthDateMax,
+       [FromQuery] DateTime? birthDateMin
+   )
+    {
+        var users = _userService.Get(name,birthDateMax,birthDateMin);
+        var userDTO = _mapper.Map<IList<UserDTO>>(users);
 
-//         if (!string.IsNullOrEmpty(Name))
-//         {
-//             query = query.Where(c => c.Name.Contains(Name));
-//         }
+        if (userDTO.Any())
+        {
+            return NoContent();
+        }
 
-//         if (birthDateMin.HasValue)
-//         {
-//             query = query.Where(c => c.BirthDate >= birthDateMin.Value);
-//         }
+        return Ok(userDTO);
+    }
 
-//         if (birthDateMax.HasValue)
-//         {
-//             query = query.Where(c => c.BirthDate <= birthDateMax.Value);
-//         }
+    [HttpGet("{id}")]
+    public ActionResult<User> GetById(
+        [FromRoute] int id
+    )
+    {
+        var user = _userService.GetById(id);
+        if (user == null) return NotFound();
+        return Ok(user);
+    }
 
-//         if (!query.ToList().Any())
-//         {
-//             return NoContent();
-//         }
+    [HttpGet("{userId}/buy")]
+    public ActionResult <List<Sale>> GetByIdbuy(
+       [FromRoute] int userId)
 
-//         return Ok(
-//             query
-//             .ToList()
-//             );
-//     }
+    {  
+        var sales = _userService.GetBuyerByID(userId);
+        var saleDTO = _mapper.Map<IList<SaleDTO>>(sales);
 
-//     [HttpGet("{id}")]
-//     public ActionResult<User> GetById(
-//         [FromRoute] int id
-//     )
-//     {
-//         var user = _context.Users.Find(id);
-//         if (user == null) return NotFound();
-//         return Ok(user);
-//     }
 
-//     [HttpGet("{userId}/buy")]
-//     public ActionResult<Sale> GetByIdbuy(
-//        [FromRoute] int userId)
+        if (saleDTO == null || saleDTO.Count() == 0)
+        {
+            return NoContent();
+        }
+        return Ok(saleDTO.ToList());
+    }
 
-//     {
-//         var sales = _context.Sales.Where(s => s.BuyerId == userId);
+    [HttpGet("{userId}/sales")]
+    public ActionResult <List<Sale>> GetSalesBySellerId(
+       [FromRoute] int userId)
+    {
+        var sales = _userService.GetSellerByID(userId);
 
-//         if (sales == null || sales.Count() == 0)
-//         {
-//             return NoContent();
-//         }
-//         return Ok(sales.ToList());
-//     }
+        var saleDTO = _mapper.Map<IList<SaleDTO>>(sales);
 
-//     [HttpGet("{userId}/sales")]
-//     public ActionResult<Sale> GetSalesBySellerId(
-//        [FromRoute] int userId)
-//     {
-//         var sales = _context.Sales.Where(s => s.SellerId == userId);
+        if (saleDTO == null || saleDTO.Count() == 0)
+        {
+            return NoContent();
+        }
+        return Ok(saleDTO.ToList());
+    }
 
-//         if (sales == null || sales.Count() == 0)
-//         {
-//             return NoContent();
-//         }
-//         return Ok(sales.ToList());
-//     }
+    [HttpPost]
+    public ActionResult Post(
+        [FromBody] UserDTO userDto
+    )
+    {
+        var newUser = _mapper.Map<User>(userDto); 
+        _userService.Inserir(newUser);
+        
+        return Created("api/users", newUser.Id);
+    }
 
-//     [HttpPost]
-//     public ActionResult<User> Post(
-//         [FromBody] UserDTO userDto
-//     )
-//     {
-//         var newUser = _context.Users.FirstOrDefault(u => u.Email == userDto.Email);
+    [HttpPost("{userId}/sales")]
+    public ActionResult<Sale> PostSaleUserId(
+           [FromRoute] int userId,
+           [FromBody] SaleDTO saleDTO)
+    {
+        var sale = _mapper.Map<Sale>(saleDTO);
+        sale.SellerId = userId;
 
-//         if (newUser != null)
-//         {
-//             return BadRequest();
-//         }
+        _saleService.Inserir(sale);
+        return Created("api/sale", sale.Id);
+    }
 
-//         newUser = new User
-//         {
-//             Name = userDto.Name,
-//             Email = userDto.Email,
-//             Password = userDto.Password,
-//             BirthDate = userDto.BirthDate
-//         };
+    [HttpPost("{userId}/buy")]
 
-//         _context.Users.Add(newUser);
-//         _context.SaveChanges();
+   public ActionResult<Sale> PostBuyerUserId(
+          [FromRoute] int sellerId,
+          [FromBody] BuyDTO body)
+    {
+        var seller = _saleService.GetById(sellerId);
+        // var user = _context.Users.Find(userId);
 
-//         return Created("api/users", newUser.Id);
-//     }
+        if (seller == null)
+        {
+            return NotFound("The user does not exist!");
+        }
 
-//     [HttpPost("{userId}/sales")]
-//     public ActionResult<Sale> PostSaleUserId(
-//            [FromRoute] int userId,
-//            [FromBody] SaleDTO body)
-//     {
+        var buyer = _userService.GetSellerByID(body.SellerId);
+        // var seller = _context.Users.Find(body.SellerId);
+        if (buyer == null)
+        {
+            return NotFound("The user does not exist!");
+        }
 
-//         if (_context.Sales.Any(s => s.BuyerId == 0 || body.BuyerId == 0))
-//         {
-//             return BadRequest();
-//         }
+        //assim estava apresentando warning no builder
+        //  if (body.SaleDate == null)
+        // {
+        //     body.SaleDate = DateTime.Now;
+        // }
 
-//         var user = _context.Users.Find(userId);
-//         if (user == null)
-//         {
-//             return NotFound("The user does not exist!");
-//         }
+        if (body.SaleDate.ToString() != null)
+        {
+            body.SaleDate = DateTime.Now;
+        }
+ 
+        
+        var buy = new Sale
+        {
+            BuyerId = seller.Id,
+            SellerId = body.SellerId,
+            SaleDate = body.SaleDate,
+        };
 
-//         var bayer = _context.Users.Find(body.BuyerId);
-//         if (bayer == null)
-//         {
-//             return NotFound("The user does not exist!");
-//         }
-
-//         if (body.SaleDate == null)
-//         {
-//             body.SaleDate = DateTime.Now;
-//         }
-
-//         var sale = new Sale
-//         {
-//             BuyerId = body.BuyerId,
-//             SellerId = userId,
-//             SaleDate = body.SaleDate,
-//         };
-//         _context.Sales.Add(sale);
-//         _context.SaveChanges();
-//         return Created("api/sale", sale.Id);
-
-//     }
-
-//     [HttpPost("{userId}/buy")]
-
-//    public ActionResult<Sale> PostBuyUserId(
-//           [FromRoute] int userId,
-//           [FromBody] BuyDTO body)
-//     {
-
-//         var user = _context.Users.Find(userId);
-//         if (user == null)
-//         {
-//             return NotFound("The user does not exist!");
-//         }
-
-//         var seller = _context.Users.Find(body.SellerId);
-//         if (seller == null)
-//         {
-//             return NotFound("The user does not exist!");
-//         }
-//         if (body.SaleDate == null)
-//         {
-//             body.SaleDate = DateTime.Now;
-//         }
-
-//         var buy = new Sale
-//         {
-//             BuyerId = userId,
-//             SellerId = body.SellerId,
-//             SaleDate = body.SaleDate,
-//         };
-
-//         _context.Sales.Add(buy);
-//         _context.SaveChanges();
-//         return Created("api/user/{userId}/buy", buy.Id);
-//     }
+        return Created("api/user/{userId}/buy", buy.Id);
+    }
       
 
-//     [HttpDelete("{userId}")]
-//     public ActionResult Delete(
-//        [FromRoute] int userId
-//    )
-//     {
-//         var user = _context.Users.Find(userId);
+    [HttpDelete("{userId}")]
+    public ActionResult Delete(
+       [FromRoute] int userId
+   )
+    {
+        var user = _userService.GetById(userId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        _userService.Excluir(user);
 
-//         if (user == null)
-//         {
-//             return NotFound();
-//         }
-//         _context.Users.Remove(user);
-//         _context.SaveChanges();
-
-//         return NoContent();
-//     }
+        return NoContent();
+    }
 
 
 }
