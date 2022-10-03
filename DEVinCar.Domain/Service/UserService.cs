@@ -76,5 +76,11 @@ namespace DEVinCar.Domain.Service
             var buyer = _saleRepository.BuyerByID(buyerId);
             return buyer;
         }
+        public User ObterPorUsuarioESenha(UserLoginDTO userloginDTO){
+            var user =  _userRepository.GetByEmailPassword(userloginDTO);
+            return user;
+        }
+
+
     }
 }
