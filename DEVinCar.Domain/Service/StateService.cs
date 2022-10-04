@@ -25,10 +25,6 @@ namespace DEVinCar.Domain.Service
             _addressService = addressService;
         }
 
-        public void Excluir(State state)
-        {
-            _staterepository.Excluir(state);
-        }
 
         public IList<State> Get()
         {
@@ -40,10 +36,6 @@ namespace DEVinCar.Domain.Service
             return _staterepository.ObterPorID(id);
         }
 
-        public void Inserir(State state)
-        {
-            _staterepository.Inserir(state);
-        }
 
         public City GetCitiesByName(string name)
         {

@@ -20,15 +20,6 @@ namespace DEVinCar.Domain.Service
             _saleRepository = saleRepository;   
         }
 
-        public void Excluir(Sale sale)
-        {
-            _saleRepository.Excluir(sale);
-        }
-
-        public IList<Sale> Get()
-        {
-            return _saleRepository.ObterTodos();
-        }
 
         public Sale GetById(int id)
         {
@@ -51,11 +42,10 @@ namespace DEVinCar.Domain.Service
                 throw new NaoExisteException("The user does not exist!");
             }
 
-            // assim estava dando warning no build
-            //  if (sale.SaleDate == null)
-            // {
-            //     sale.SaleDate = DateTime.Now;
-            // }
+             if (sale.SaleDate == null)
+            {
+                sale.SaleDate = DateTime.Now;
+            }
 
             if (sale.SaleDate.ToString() == null)
             {
