@@ -26,6 +26,8 @@ builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStateService, StateService>();
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddSingleton(AutoMapperConfiguration.Configure());
 
 var key = Encoding.ASCII.GetBytes(Settings.Secret);

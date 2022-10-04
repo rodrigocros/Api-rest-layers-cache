@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using DEVinCar.Domain.Interfaces.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -13,12 +14,14 @@ namespace DEVinCar.Api.Controllers;
 [Authorize(Roles = "Gerente")]
 public class CarController : ControllerBase
 {
+    private readonly IMemoryCache _cache;
     private readonly ICarService _carService;
     private readonly IMapper _mapper;
 
 
-    public CarController(ICarService carService, IMapper mapper)
+    public CarController(ICarService carService, IMapper mapper, IMemoryCache cache)
     {
+        _cache = cache;
         _carService = carService;
         _mapper = mapper;
     }
@@ -26,9 +29,11 @@ public class CarController : ControllerBase
     [HttpGet("{carId}")]
     public ActionResult<Car> GetById([FromRoute] int carId)
     {
-        var car = _carService.GetById(carId);
-        // var car = _context.Cars.Find(carId);
-        if (car == null) return NotFound();
+        Car car;
+        if(!_cache.TryGetValue<Car>($"car:{carId}", out car)){
+            car = _carService.GetById(carId);
+            _cache.Set($"car:{carId}", car, new TimeSpan(0,0,50));
+        }
         return Ok(car);
     }
 
@@ -85,6 +90,8 @@ public class CarController : ControllerBase
         // _context.SaveChanges();
 
         _carService.Excluir(car);
+        _cache.Remove($"car:{carId}");
+
         return NoContent();
     }
 
@@ -109,6 +116,7 @@ public class CarController : ControllerBase
 
         // _context.SaveChanges();
         _carService.Inserir(car);
+        _cache.Set($"car:{carId}", car, new TimeSpan(0,0,50));
         return NoContent();
     }
 }
