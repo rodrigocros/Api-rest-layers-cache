@@ -29,20 +29,11 @@ public class CarController : ControllerBase
     [HttpGet("{carId}")]
     public ActionResult<Car> GetById([FromRoute] int carId)
     {
-        var carcache = _cache.Get($"Carro:{carId}");
-        var carDB = _carService.GetById(carId);
-
-        if(carcache != null){
-            
-            _cache.Set($"aluno:{carId}", carDB);
-            return Ok(carcache);
+        Car car;
+        if(!_cache.TryGetValue<Car>($"car:{carId}", out car)){
+            car = _carService.GetById(carId);
+            _cache.Set($"car:{carId}", car, new TimeSpan(0,0,50));
         }
-
-        
-        var car = _carService.GetById(carId);
-
-        // var car = _context.Cars.Find(carId);
-        if (car == null) return NotFound();
         return Ok(car);
     }
 
@@ -99,6 +90,8 @@ public class CarController : ControllerBase
         // _context.SaveChanges();
 
         _carService.Excluir(car);
+        _cache.Remove($"car:{carId}");
+
         return NoContent();
     }
 
@@ -123,6 +116,7 @@ public class CarController : ControllerBase
 
         // _context.SaveChanges();
         _carService.Inserir(car);
+        _cache.Set($"car:{carId}", car, new TimeSpan(0,0,50));
         return NoContent();
     }
 }
