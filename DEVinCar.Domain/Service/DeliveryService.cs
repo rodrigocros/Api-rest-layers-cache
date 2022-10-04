@@ -44,8 +44,13 @@ namespace DEVinCar.Domain.Service
          public Delivery GetById(int id)
         {
             return  _deliveryRepository.ObterPorID(id);
-         
+        
+        }
+        public void Inserir(Delivery delivery)
+        {
+            _deliveryRepository.Inserir(delivery);
         }
 
+        
     }
 }
