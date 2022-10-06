@@ -26,7 +26,7 @@ namespace DEVinCar.Domain.Service
             _userRepository.Excluir(user);
         }
 
-        public IList<User> Get(string Name,DateTime? birthDateMax,DateTime? birthDateMin)
+        public IQueryable<User> Get(string Name,DateTime? birthDateMax,DateTime? birthDateMin)
         {
             var query = _userRepository.Query();
 
@@ -45,7 +45,7 @@ namespace DEVinCar.Domain.Service
                 query = query.Where(c => c.BirthDate <= birthDateMax.Value);
             }
 
-            return query.ToList();
+            return query;
         }
 
         public User GetById(int id)

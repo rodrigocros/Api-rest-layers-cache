@@ -20,22 +20,17 @@ namespace DEVinCar.Domain.Service
 
         public void Excluir(Address adress)
         {
-            throw new NotImplementedException();
-        }
-
-        public IList<Address> Get()
-        {
-            throw new NotImplementedException();
+            _addressRepository.Excluir(adress);
         }
 
         public Address GetById(int id)
         {
-            throw new NotImplementedException();
+           return _addressRepository.ObterPorID(id);
         }
 
         public void Inserir(Address adress)
         {
-            throw new NotImplementedException();
+            _addressRepository.Inserir(adress);
         }
 
         public IList<Address> GetList(int? cityId,int? stateId,string street,string cep)

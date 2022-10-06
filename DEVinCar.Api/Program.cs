@@ -58,17 +58,15 @@ builder.Services.AddAuthentication(_x_ =>{
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddMvc(config =>
-    {
-        config.ReturnHttpNotAcceptable = true;
-        config.OutputFormatters.Add(new XmlSerializerOutputFormatter());
-        config.InputFormatters.Add(new XmlSerializerInputFormatter(config));
+{
+    config.ReturnHttpNotAcceptable = true;
+    config.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+    config.InputFormatters.Add(new XmlDataContractSerializerInputFormatter(config));
+});
 
-    });
-
-
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 

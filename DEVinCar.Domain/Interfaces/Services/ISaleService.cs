@@ -9,11 +9,11 @@ namespace DEVinCar.Domain.Interfaces.Services
 {
     public interface ISaleService
     {
-        IList<Sale> Get();
         Sale GetById(int id);
         void Inserir(Sale sale);
-        void Excluir (Sale sale);
-        List<Sale> SaleAsQueryable();
+        Sale PostSaleById(int id, SaleDTO saleDTO);
+
+
 
 
     }

@@ -9,7 +9,7 @@ namespace DEVinCar.Domain.Interfaces.Services
 {
     public interface IUserService
     {
-        IList<User> Get(string Name,DateTime? birthDateMax,DateTime? birthDateMin);
+        IQueryable<User> Get(string Name,DateTime? birthDateMax,DateTime? birthDateMin);
         User GetById(int id);
         void Inserir(User user);
         void Excluir (User user);

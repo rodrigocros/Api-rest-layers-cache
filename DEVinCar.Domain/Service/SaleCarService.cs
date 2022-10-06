@@ -17,16 +17,6 @@ namespace DEVinCar.Domain.Service
             _salecarRepository = salecarRepository ;   
         }
 
-        public void Excluir(SaleCar saleCar)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<SaleCar> Get()
-        {
-            throw new NotImplementedException();
-        }
-
         public SaleCar GetById(int id)
         {
            return _salecarRepository.ObterPorID(id);
@@ -34,7 +24,7 @@ namespace DEVinCar.Domain.Service
 
         public void Inserir(SaleCar salecar)
         {
-            throw new NotImplementedException();
+            _salecarRepository.Inserir(salecar);
         }
     }
 }

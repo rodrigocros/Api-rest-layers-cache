@@ -17,21 +17,6 @@ namespace DEVinCar.Domain.Service
             _cityrepository = cityrepository;   
         }
 
-        public void Excluir(City city)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<City> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-        public City GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public City GetByName(string name)
         {
             var cityTodos = _cityrepository.Query();
@@ -41,9 +26,5 @@ namespace DEVinCar.Domain.Service
 
         }
 
-        public void Inserir(City city)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

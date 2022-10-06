@@ -9,9 +9,7 @@ namespace DEVinCar.Domain.Interfaces.Services
 {
     public interface ISaleCarService
     {
-        IList<SaleCar> Get();
         SaleCar GetById(int id);
         void Inserir(SaleCar saleCar);
-        void Excluir (SaleCar saleCar);
     }
 }

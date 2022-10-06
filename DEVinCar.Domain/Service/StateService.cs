@@ -25,10 +25,6 @@ namespace DEVinCar.Domain.Service
             _addressService = addressService;
         }
 
-        public void Excluir(State state)
-        {
-            _staterepository.Excluir(state);
-        }
 
         public IList<State> Get()
         {
@@ -40,10 +36,6 @@ namespace DEVinCar.Domain.Service
             return _staterepository.ObterPorID(id);
         }
 
-        public void Inserir(State state)
-        {
-            _staterepository.Inserir(state);
-        }
 
         public City GetCitiesByName(string name)
         {
@@ -76,10 +68,18 @@ namespace DEVinCar.Domain.Service
             
         }
 
-        public List<City> GetCitiesAsQueryable()
+        public IQueryable GetCitiesAsQueryable()
         {
-            return (List<City>)_cityrepository.Query();
+            return _cityrepository.Query();
         }
+        public State GetStatebyName(string name){
 
+            var query = _staterepository.Query();
+
+            query = query.Where(s => s.Name.ToUpper().Contains(name.ToUpper()));
+            
+            return query.FirstOrDefault();
+        
+        }
     }
 }

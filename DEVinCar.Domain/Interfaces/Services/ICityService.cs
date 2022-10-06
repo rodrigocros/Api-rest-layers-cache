@@ -9,10 +9,6 @@ namespace DEVinCar.Domain.Interfaces.Services
 {
     public interface ICityService
     {
-        IList<City> Get();
-        City GetById(int id);
-        void Inserir(City city);
-        void Excluir (City city);
         City GetByName(string name);
 
     }

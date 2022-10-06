@@ -34,11 +34,11 @@ public class SalesController : ControllerBase
     public ActionResult<List<SaleDTO>> GetItensSale(
         [FromRoute] int saleId)
     {   
-        var sales = _saleservice.GetById(saleId);
+        var sales = _saleCarService.GetById(saleId);
         if (sales == null) return NotFound();
 
-        var saleDTO = _mapper.Map<List<SaleDTO>>(sales);
-        return Ok(sales);
+        var saleCarDTO = _mapper.Map<List<SaleCarDTO>>(sales);
+        return Ok(saleCarDTO);
     }
 
     [Authorize(Roles = "Gerente")]
@@ -78,7 +78,7 @@ public class SalesController : ControllerBase
             // _context.SaveChanges();
             _saleCarService.Inserir(saleCar);
             
-            return Created("api/sales/{saleId}/item", body.CarId);
+            return Created("api/sales/{saleId}/item", saleCar);
         }
         return NotFound();
     }
@@ -130,81 +130,6 @@ public class SalesController : ControllerBase
         // _context.SaveChanges();
 
         return Created("{saleId}/deliver", deliver.Id);
-    }
-
-    [HttpPatch("{saleId}/car/{carId}/amount/{amount}")]
-    public ActionResult<SaleCar> Patch(
-            [FromRoute] int saleId,
-            [FromRoute] int carId,
-            [FromRoute] int amount
-            )
-    {
-        var carSaleId = _saleservice.GetById(saleId);
-        // var carSaleId = _context.Sales.Find(saleId);
-        var carID = _saleCarService.GetById(carId);
-        // var carID = _context.SaleCars.Find(carId);
-
-        if (carSaleId == null || carID == null)
-        {
-            return NotFound();
-        }
-
-        if (amount <= 0)
-        {
-            return BadRequest();
-        }
-
-        try
-        {
-            carID.Amount = amount;
-            carID.Amount = amount;
-            // _context.SaleCars.Update(carID);
-            // _context.SaveChanges();
-            _saleCarService.Inserir(carID);
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
-
-    [HttpPatch("{saleId}/car/{carId}/price/{unitPrice}")]
-    public ActionResult<SaleCar> Patch(
-           [FromRoute] int saleId,
-           [FromRoute] int carId,
-           [FromRoute] decimal unitPrice
-           )
-    {
-        var carSaleId = _saleservice.GetById(saleId);
-        // var carSaleId = _context.Sales.Find(saleId);
-        // var carID = _context.SaleCars.Find(carId);
-        var carID = _saleCarService.GetById(carId);
-
-
-        if (carSaleId == null || carID == null)
-        {
-            return NotFound();
-        }
-
-        if (carID.UnitPrice <= 0)
-        {
-            return BadRequest();
-        }
-
-        try
-        {
-            carID.UnitPrice = unitPrice;
-            // _context.SaleCars.Update(carID);
-            // _context.SaveChanges();
-            _saleCarService.Inserir(carID);
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-
     }
 
 }
