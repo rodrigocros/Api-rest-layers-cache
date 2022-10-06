@@ -11,6 +11,9 @@ namespace DEVinCar.Domain.Interfaces.Services
     {
         Sale GetById(int id);
         void Inserir(Sale sale);
+        Sale PostSaleById(int id, SaleDTO saleDTO);
+
+
 
 
     }

@@ -2,6 +2,20 @@ namespace DEVinCar.Domain.Models
 {
     public class Address
     {
+        public Address()
+        {
+        }
+
+        public Address(int id, int cityId, string street, string cep, int number, string complement)
+        {
+            Id = id;
+            CityId = cityId;
+            Street = street;
+            Cep = cep;
+            Number = number;
+            Complement = complement;
+        }
+
         public int Id { get; set; }
         public int CityId { get; set; }
         public string Street { get; set; }

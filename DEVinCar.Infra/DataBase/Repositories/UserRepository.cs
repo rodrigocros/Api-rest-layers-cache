@@ -20,5 +20,6 @@ namespace DEVinCar.Infra.DataBase.Repositories
             var user =  _context.Users.FirstOrDefault(u => u.Email == userloginDTO.Email && u.Password == userloginDTO.Password);
             return user;
         }
+
     }
 }

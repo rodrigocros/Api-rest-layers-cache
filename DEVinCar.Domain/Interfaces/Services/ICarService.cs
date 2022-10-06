@@ -15,6 +15,8 @@ namespace DEVinCar.Domain.Interfaces.Services
         void Excluir (Car car);
         IList<Car> GetFiltered(string name, decimal? priceMin,decimal? priceMax);
         SaleCar GetSaleCarPorId(int id);
+        void Atualizar(Car car);
+
 
     }
 }

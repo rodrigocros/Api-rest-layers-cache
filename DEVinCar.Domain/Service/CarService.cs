@@ -40,6 +40,11 @@ namespace DEVinCar.Domain.Service
         {
             _carRepository.Inserir(car);
         }
+         public void Atualizar(Car car)
+        {
+            _carRepository.Atualizar(car);
+            
+        }
 
         public IList<Car> GetFiltered(string name, decimal? priceMin,decimal? priceMax){
             var query = _carRepository.Query();

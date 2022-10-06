@@ -115,7 +115,7 @@ public class CarController : ControllerBase
         car.SuggestedPrice = carDto.SuggestedPrice;
 
         // _context.SaveChanges();
-        _carService.Inserir(car);
+        _carService.Atualizar(car);
         _cache.Set($"car:{carId}", car, new TimeSpan(0,0,50));
         return NoContent();
     }

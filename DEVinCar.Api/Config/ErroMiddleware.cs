@@ -36,12 +36,15 @@ namespace DEVinCar.Api.Config
             else if (ex is NaoExisteException){
                 status = HttpStatusCode.NotAcceptable;
                 message = ex.Message;
+            }else if (ex is ErroDeEntrada){
+                status = HttpStatusCode.BadRequest;
+                message = ex.Message;
             }
             else{
                 status = HttpStatusCode.InternalServerError;
                 message = "Ocorreu um erro favor contactar a TI";
-
             }
+    
 
             var response = new ErrorDTO(message);
 

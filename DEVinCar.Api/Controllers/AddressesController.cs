@@ -35,59 +35,13 @@ public class AddressesController : ControllerBase
 
     }
 
-    [HttpPatch("{addressId}")]
-    public ActionResult<AddressViewModel> Patch([FromRoute] int addressId,
-                                       [FromBody] AddressPatchDTO addressPatchDTO)
-    {
-
-        // Address address = _context.Addresses.Include(a => a.City).FirstOrDefault(a => a.Id == addressId);
-         Address address = _adressService.GetById(addressId);
-
-        if (address == null)
-            return NotFound($"The address with ID: {addressId} not found.");
-
-        string street = addressPatchDTO.Street ?? null;
-        string cep = addressPatchDTO.Cep ?? null;
-        string complement = addressPatchDTO.Complement ?? null;
-
-        if (street != null)
-        {
-            if (addressPatchDTO.Street == "")
-                return BadRequest("The street name cannot be empty.");
-            address.Street = street;
-        }
-
-        if (addressPatchDTO.Cep != null)
-        {
-            if (addressPatchDTO.Cep == "")
-                return BadRequest("The cep cannot be empty.");
-            if (!addressPatchDTO.Cep.All(char.IsDigit))
-                return BadRequest("Every characters in cep must be numeric.");
-            address.Cep = cep;
-        }
-
-        if (addressPatchDTO.Complement != null)
-        {
-            if (addressPatchDTO.Complement == "")
-                return BadRequest("The complement cannot be empty.");
-            address.Complement = complement;
-        }
-
-        if (addressPatchDTO.Number != 0)
-            address.Number = addressPatchDTO.Number;
-
-        AddressViewModel addressViewModel = new AddressViewModel(
-            address.Id,
-            address.Street,
-            address.CityId,
-            address.City.Name,
-            address.Number,
-            address.Complement,
-            address.Cep
-        );
-
-        return Ok(addressViewModel);
+    [HttpPost]
+    public ActionResult<Address> Insert([FromBody]int id, int cityId, string street,string cep, int number ,string complement ){
+        var address = new Address(id,cityId,street,cep, number,complement);
+        _adressService.Inserir(address);
+        return Ok(address);
     }
+    
 
     [HttpDelete("{addressId}")]
 

@@ -33,12 +33,12 @@ public class UserController : ControllerBase
         var users = _userService.Get(name,birthDateMax,birthDateMin);
         var userDTO = _mapper.Map<IList<UserDTO>>(users);
 
-        if (userDTO.Any())
+        if (!userDTO.Any())
         {
             return NoContent();
         }
 
-        return Ok(userDTO);
+        return Ok(users);
     }
 
     [HttpGet("{id}")]
@@ -71,15 +71,14 @@ public class UserController : ControllerBase
     public ActionResult <List<Sale>> GetSalesBySellerId(
        [FromRoute] int userId)
     {
-        var sales = _userService.GetSellerByID(userId);
+        var sales = _saleService.GetById(userId);
 
-        var saleDTO = _mapper.Map<IList<SaleDTO>>(sales);
 
-        if (saleDTO == null || saleDTO.Count() == 0)
+        if (sales == null)
         {
             return NoContent();
         }
-        return Ok(saleDTO.ToList());
+        return Ok(sales);
     }
 
     [HttpPost]
@@ -96,58 +95,12 @@ public class UserController : ControllerBase
     [HttpPost("{userId}/sales")]
     public ActionResult<Sale> PostSaleUserId(
            [FromRoute] int userId,
-           [FromBody] SaleDTO saleDTO)
+           [FromBody] SaleDTO body)
     {
-        var sale = _mapper.Map<Sale>(saleDTO);
-        sale.SellerId = userId;
+        var sale = _saleService.PostSaleById(userId,body);
 
-        _saleService.Inserir(sale);
         return Created("api/sale", sale.Id);
-    }
 
-    [HttpPost("{userId}/buy")]
-
-   public ActionResult<Sale> PostBuyerUserId(
-          [FromRoute] int sellerId,
-          [FromBody] BuyDTO body)
-    {
-        var seller = _saleService.GetById(sellerId);
-        // var user = _context.Users.Find(userId);
-
-        if (seller == null)
-        {
-            return NotFound("The user does not exist!");
-        }
-
-        var buyer = _userService.GetSellerByID(body.SellerId);
-        // var seller = _context.Users.Find(body.SellerId);
-        if (buyer == null)
-        {
-            return NotFound("The user does not exist!");
-        }
-
-        //assim estava apresentando warning no builder
-        //  if (body.SaleDate == null)
-        // {
-        //     body.SaleDate = DateTime.Now;
-        // }
-
-        if (body.SaleDate.ToString() != null)
-        {
-            body.SaleDate = DateTime.Now;
-        }
- 
-        
-        var sale = new Sale
-        {
-            BuyerId = seller.Id,
-            SellerId = body.SellerId,
-            SaleDate = body.SaleDate,
-        };
-
-        _saleService.Inserir(sale);
-
-        return Created("api/user/{userId}/buy", sale.Id);
     }
       
 

@@ -58,5 +58,41 @@ namespace DEVinCar.Domain.Service
         {
             return (List<Sale>)_saleRepository.Query();
         }
+
+        public Sale PostSaleById(int Id, SaleDTO body){
+ 
+
+        if (body ==null )
+        {
+            throw new ErroDeEntrada("Por favor preencher todos os dados");
+        }
+
+        // var user = _context.Users.Find(userId);
+        var user = _userService.GetById(Id);
+        if (user == null)
+        {
+            throw new NaoExisteException("The user does not exist!");
+        }
+
+        var buyer = _userService.GetById(body.BuyerId);
+        if (buyer == null)
+        {
+            throw new NaoExisteException("The buyer does not exist!");
+        }
+
+        if (body.SaleDate == null)
+        {
+            body.SaleDate = DateTime.Now;
+        }
+
+        var sale = new Sale
+        {
+            BuyerId = body.BuyerId,
+            SellerId = user.Id,
+            SaleDate = body.SaleDate,
+        };
+        _saleRepository.Inserir(sale);
+        return sale;
+        }
     }
 }

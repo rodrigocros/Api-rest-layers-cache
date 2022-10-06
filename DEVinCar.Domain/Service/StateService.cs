@@ -68,10 +68,18 @@ namespace DEVinCar.Domain.Service
             
         }
 
-        public List<City> GetCitiesAsQueryable()
+        public IQueryable GetCitiesAsQueryable()
         {
-            return (List<City>)_cityrepository.Query();
+            return _cityrepository.Query();
         }
+        public State GetStatebyName(string name){
 
+            var query = _staterepository.Query();
+
+            query = query.Where(s => s.Name.ToUpper().Contains(name.ToUpper()));
+            
+            return query.FirstOrDefault();
+        
+        }
     }
 }
